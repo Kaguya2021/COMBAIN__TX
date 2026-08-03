@@ -41,7 +41,6 @@
             position: relative;
         }
 
-        /* Ambient background glow */
         body::before {
             content: '';
             position: absolute;
@@ -66,7 +65,6 @@
             justify-content: center;
         }
 
-        /* Main Title */
         .main-title {
             font-size: clamp(1.8rem, 4vw, 2.6rem);
             font-weight: 700;
@@ -82,7 +80,6 @@
             text-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Menu Buttons Wrapper */
         .menu-wrapper {
             display: flex;
             flex-direction: column;
@@ -94,7 +91,6 @@
             animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
         }
 
-        /* Mechanical Button Style */
         .menu-btn {
             width: 100%;
             height: 60px;
@@ -128,7 +124,6 @@
             background-color: #12161c;
         }
 
-        /* Sections / Views */
         .view-section {
             display: none;
             width: 100%;
@@ -174,7 +169,6 @@
             border-color: var(--text-secondary);
         }
 
-        /* Documentation & Script content styles */
         .content-box {
             background: var(--surface-color);
             border: 1px solid var(--border-color);
@@ -229,34 +223,6 @@
             background: none;
             border: none;
             padding: 0;
-        }
-
-        /* Script Section Specific Styles */
-        .script-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .github-link-card {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-decoration: none;
-            color: var(--text-primary);
-            box-shadow: 0 4px 12px var(--shadow-color);
-            transition: var(--transition-smooth);
-        }
-
-        .github-link-card:hover {
-            background-color: var(--surface-hover);
-            border-color: var(--accent-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px var(--shadow-color), 0 0 10px var(--accent-glow);
         }
 
         .download-all-btn {
@@ -334,40 +300,26 @@
             transition: transform 0.2s ease;
         }
 
-        .support-card:hover .card-arrow, .github-link-card:hover .card-arrow {
+        .support-card:hover .card-arrow {
             transform: translateX(4px);
             color: var(--accent-color);
         }
 
-        /* Keyframe Animations */
         @keyframes fadeInDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Fade transition class for view switching */
         .fade-in {
             animation: fadeInView 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes fadeInView {
-            from {
-                opacity: 0;
-                transform: scale(0.97) translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.97) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
     </style>
 </head>
@@ -375,7 +327,7 @@
 
     <div class="container">
         <!-- Main Menu View -->
-        <div id="main-view" class="view-section active">
+        <div id="main-view" class="view-section active" style="display: flex;">
             <h1 class="main-title">Kaguya__Combain_TX</h1>
             <div class="menu-wrapper">
                 <button class="menu-btn" onclick="switchView('instruction-view')">
@@ -398,101 +350,19 @@
             </div>
             <div class="content-box">
                 <h2>Инструкция по запуску Unlock Sniper в Termux</h2>
-
                 <h3>1. Установите Termux</h3>
                 <p>Скачайте и установите Termux.</p>
                 <hr>
-
                 <h3>2. Обновите пакеты</h3>
-                <p>После запуска Termux выполните:</p>
                 <pre><code>pkg update && pkg upgrade -y</code></pre>
                 <hr>
-
-                <h3>3. Установите Python и необходимые пакеты</h3>
-                <pre><code>pkg install python -y
-pkg install git -y
-pkg install nano -y</code></pre>
-                <p>Установите библиотеки Python:</p>
-                <pre><code>pip install requests ntplib</code></pre>
+                <h3>3. Установите Python и пакеты</h3>
+                <pre><code>pkg install python git nano -y
+pip install requests ntplib</code></pre>
                 <hr>
-
-                <h3>4. Перейдите в папку со скриптом</h3>
-                <p>Например:</p>
-                <pre><code>cd /sdcard/UnlockSniper</code></pre>
-                <p>или</p>
-                <pre><code>cd ~/UnlockSniper</code></pre>
-                <p><em>(используйте путь, где находятся файлы проекта.)</em></p>
-                <p>Проверьте наличие файлов:</p>
-                <pre><code>ls</code></pre>
-                <p>Вы должны увидеть:</p>
-                <pre><code>main.py
-config.py
-sniper.py
-time_sync.py
-logger.py</code></pre>
-                <hr>
-
-                <h3>5. Первый запуск</h3>
-                <p>Запустите программу:</p>
-                <pre><code>python main.py</code></pre>
-                <p>При первом запуске автоматически будет создан файл:</p>
-                <pre><code>token.txt</code></pre>
-                <p>После этого программа завершится.</p>
-                <hr>
-
-                <h3>6. Добавьте свой popRunToken</h3>
-                <p>Откройте файл:</p>
-                <pre><code>nano token.txt</code></pre>
-                <p>Удалите комментарий и вставьте только свой popRunToken.</p>
-                <p>Пример:</p>
-                <pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
-                <p>После вставки сохраните файл:</p>
-                <p><code>CTRL + O</code><br>Нажмите <code>Enter</code></p>
-                <p>Затем выйдите:</p>
-                <p><code>CTRL + X</code></p>
-                <hr>
-
-                <h3>7. Запустите снайпер</h3>
-                <pre><code>python main.py</code></pre>
-                <p>Программа:</p>
-                <ul>
-                    <li>синхронизирует время через NTP;</li>
-                    <li>автоматически определит ближайшую полночь по пекинскому времени (UTC+8);</li>
-                    <li>покажет таймер обратного отсчёта;</li>
-                    <li>дождётся нужного момента;</li>
-                    <li>одновременно отправит запросы с заданными Time Shift;</li>
-                    <li>сохранит журнал работы в файл: <code>unlock_sniper.log</code></li>
-                </ul>
-                <hr>
-
-                <h3>Полезные команды</h3>
-                <p><strong>Запуск программы:</strong><br><code>python main.py</code></p>
-                <p><strong>Просмотр файлов:</strong><br><code>ls</code></p>
-                <p><strong>Открыть token.txt:</strong><br><code>nano token.txt</code></p>
-                <p><strong>Просмотреть лог:</strong><br><code>cat unlock_sniper.log</code></p>
-                <p><strong>Остановить программу:</strong><br><code>Ctrl + C</code></p>
-                <hr>
-
-                <h3>Используемые Time Shift</h3>
-                <p>По умолчанию используются следующие смещения:</p>
-                <ul>
-                    <li>150 мс</li>
-                    <li>250 мс</li>
-                    <li>350 мс</li>
-                    <li>500 мс</li>
-                </ul>
-                <p>Каждое смещение запускается в отдельном потоке и отправляет независимый запрос.</p>
-                <hr>
-
-                <h3>Требования</h3>
-                <ul>
-                    <li>Android с установленным Termux.</li>
-                    <li>Python.</li>
-                    <li>Библиотеки "requests" и "ntplib".</li>
-                    <li>Действительный "popRunToken" в файле "token.txt".</li>
-                    <li>Стабильное интернет-соединение.</li>
-                    <li>Не закрывайте Termux до окончания работы программы.</li>
-                </ul>
+                <h3>4. Запуск скрипта</h3>
+                <pre><code>cd /sdcard/UnlockSniper
+python main.py</code></pre>
             </div>
         </div>
 
@@ -505,26 +375,16 @@ logger.py</code></pre>
             <div class="content-box">
                 <h2>📦 Скачать исходный код</h2>
                 <p>Спасибо за интерес к проекту!</p>
-                <p>Вы можете скачать все файлы проекта двумя способами:</p>
+                <p>Вы можете скачать файлы проекта:</p>
                 <hr>
-                
-                <h3>📂 Вариант 1 — Скачать по отдельности</h3>
-                <p>Если вам нужны только определённые файлы, откройте репозиторий GitHub и скачайте их по одному.</p>
-                <p><strong>GitHub:</strong><br>
-                <a href="https://github.com/Kaguya2021/Kaguya__combain" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: none;">https://github.com/Kaguya2021/Kaguya__combain</a></p>
+                <h3>📂 GitHub репозиторий</h3>
+                <p><a href="https://github.com/Kaguya2021/Kaguya__combain" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color);">Открыть GitHub</a></p>
                 <hr>
-
-                <h3>🚀 Вариант 2 — Скачать весь проект</h3>
-                <p>Нажмите зелёную кнопку «Скачать» ниже, чтобы загрузить весь проект одним архивом.</p>
-                <p>После загрузки распакуйте архив и следуйте инструкции по установке.</p>
+                <h3>🚀 Скачать архив проекта</h3>
                 <br>
-                
                 <a href="bootloader_unlocker.zip" download class="download-all-btn">
                     📥 Скачать весь проект (ZIP)
                 </a>
-                
-                <br>
-                <p style="text-align: center; color: var(--text-secondary); margin-top: 10px;">💚 Приятного использования!</p>
             </div>
         </div>
 
@@ -535,7 +395,6 @@ logger.py</code></pre>
                 <button class="back-btn" onclick="switchView('main-view')">Назад</button>
             </div>
             <div class="cards-grid">
-                <!-- TikTok Card -->
                 <a href="https://tiktok.com/@alkon191" target="_blank" rel="noopener noreferrer" class="support-card">
                     <div class="card-info">
                         <h3>TikTok</h3>
@@ -543,8 +402,6 @@ logger.py</code></pre>
                     </div>
                     <span class="card-arrow">↗</span>
                 </a>
-
-                <!-- Telegram Profile Card -->
                 <a href="https://t.me/kaguya2_0" target="_blank" rel="noopener noreferrer" class="support-card">
                     <div class="card-info">
                         <h3>Telegram</h3>
@@ -552,8 +409,6 @@ logger.py</code></pre>
                     </div>
                     <span class="card-arrow">↗</span>
                 </a>
-
-                <!-- Telegram Channel Card -->
                 <a href="https://t.me/kaguya_2_0_bots" target="_blank" rel="noopener noreferrer" class="support-card">
                     <div class="card-info">
                         <h3>Telegram Channel</h3>
@@ -567,4 +422,20 @@ logger.py</code></pre>
 
     <script>
         function switchView(viewId) {
-            const views = document.querySe
+            const views = document.querySelectorAll('.view-section');
+            
+            views.forEach(view => {
+                view.classList.remove('active', 'fade-in');
+                view.style.display = 'none'; // Жестко скрываем неактивные блоки
+            });
+
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.style.display = 'flex'; // Принудительно показываем нужный блок
+                void targetView.offsetWidth; // Сброс анимации
+                targetView.classList.add('active', 'fade-in');
+            }
+        }
+    </script>
+</body>
+</html>
