@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaguya__Combain_TX</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --surface-hover: #1f242c;
+            --accent-color: #ff6900;
+            --accent-glow: rgba(255, 105, 0, 0.3);
+            --success-color: #238636;
+            --success-hover: #2ea043;
+            --success-glow: rgba(35, 134, 54, 0.4);
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --border-color: #30363d;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -10vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60vw;
+            height: 40vh;
+            background: radial-gradient(circle, rgba(255,105,0,0.08) 0%, rgba(13,17,23,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        /* Main Title */
+        .main-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Menu Buttons Wrapper */
+        .menu-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        /* Mechanical Button Style */
+        .menu-btn {
+            width: 100%;
+            height: 60px;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px var(--shadow-color), inset 0 1px 0 rgba(255,255,255,0.05);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+            user-select: none;
+            position: relative;
+            outline: none;
+        }
+
+        .menu-btn:hover {
+            background-color: var(--surface-hover);
+            border-color: rgba(255, 105, 0, 0.4);
+            box-shadow: 0 10px 25px var(--shadow-color), 0 0 15px var(--accent-glow);
+        }
+
+        .menu-btn:active {
+            transform: translateY(3px) scale(0.98);
+            box-shadow: 0 3px 10px var(--shadow-color), inset 0 2px 5px rgba(0,0,0,0.3);
+            background-color: #12161c;
+        }
+
+        /* Sections / Views */
+        .view-section {
+            display: none;
+            width: 100%;
+            max-width: 540px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: var(--transition-smooth);
+        }
+
+        .view-section.active {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .back-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        /* Documentation & Script content styles */
+        .content-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .content-box h2, .content-box h3 {
+            color: var(--text-primary);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .content-box p, .content-box ul, .content-box ol {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        .content-box ul, .content-box ol {
+            padding-left: 20px;
+        }
+
+        .content-box hr {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 16px 0;
+        }
+
+        .content-box pre, .content-box code {
+            background: #090d12;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 8px;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+            font-size: 0.85rem;
+            color: #ff9e64;
+        }
+
+        .content-box pre {
+            padding: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .content-box pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* Script Section Specific Styles */
+        .script-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .github-link-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: var(--transition-smooth);
+        }
+
+        .github-link-card:hover {
+            background-color: var(--surface-hover);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--shadow-color), 0 0 10px var(--accent-glow);
+        }
+
+        .download-all-btn {
+            width: 100%;
+            height: 60px;
+            background-color: var(--success-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(35, 134, 54, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+            user-select: none;
+            outline: none;
+            text-decoration: none;
+        }
+
+        .download-all-btn:hover {
+            background-color: var(--success-hover);
+            box-shadow: 0 10px 25px rgba(35, 134, 54, 0.4), 0 0 15px var(--success-glow);
+        }
+
+        .download-all-btn:active {
+            transform: translateY(3px) scale(0.98);
+            box-shadow: 0 3px 10px rgba(35, 134, 54, 0.3), inset 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .support-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: var(--transition-smooth);
+        }
+
+        .support-card:hover {
+            background-color: var(--surface-hover);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--shadow-color), 0 0 10px var(--accent-glow);
+        }
+
+        .card-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .card-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .card-arrow {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .support-card:hover .card-arrow, .github-link-card:hover .card-arrow {
+            transform: translateX(4px);
+            color: var(--accent-color);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Fade transition class for view switching */
+        .fade-in {
+            animation: fadeInView 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInView {
+            from {
+                opacity: 0;
+                transform: scale(0.97) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Main Menu View -->
+        <div id="main-view" class="view-section active">
+            <h1 class="main-title">Kaguya__Combain_TX</h1>
+            <div class="menu-wrapper">
+                <button class="menu-btn" onclick="switchView('instruction-view')">
+                    📖 Инструкция
+                </button>
+                <button class="menu-btn" onclick="switchView('script-view')">
+                    ⚡ Скрипт
+                </button>
+                <button class="menu-btn" onclick="switchView('support-view')">
+                    🛠 Тех поддержка
+                </button>
+            </div>
+        </div>
+
+        <!-- Instruction View -->
+        <div id="instruction-view" class="view-section">
+            <div class="section-header">
+                <h2 class="section-title">Инструкция</h2>
+                <button class="back-btn" onclick="switchView('main-view')">Назад</button>
+            </div>
+            <div class="content-box">
+                <h2>Инструкция по запуску Unlock Sniper в Termux</h2>
+
+                <h3>1. Установите Termux</h3>
+                <p>Скачайте и установите Termux.</p>
+                <hr>
+
+                <h3>2. Обновите пакеты</h3>
+                <p>После запуска Termux выполните:</p>
+                <pre><code>pkg update && pkg upgrade -y</code></pre>
+                <hr>
+
+                <h3>3. Установите Python и необходимые пакеты</h3>
+                <pre><code>pkg install python -y
+pkg install git -y
+pkg install nano -y</code></pre>
+                <p>Установите библиотеки Python:</p>
+                <pre><code>pip install requests ntplib</code></pre>
+                <hr>
+
+                <h3>4. Перейдите в папку со скриптом</h3>
+                <p>Например:</p>
+                <pre><code>cd /sdcard/UnlockSniper</code></pre>
+                <p>или</p>
+                <pre><code>cd ~/UnlockSniper</code></pre>
+                <p><em>(используйте путь, где находятся файлы проекта.)</em></p>
+                <p>Проверьте наличие файлов:</p>
+                <pre><code>ls</code></pre>
+                <p>Вы должны увидеть:</p>
+                <pre><code>main.py
+config.py
+sniper.py
+time_sync.py
+logger.py</code></pre>
+                <hr>
+
+                <h3>5. Первый запуск</h3>
+                <p>Запустите программу:</p>
+                <pre><code>python main.py</code></pre>
+                <p>При первом запуске автоматически будет создан файл:</p>
+                <pre><code>token.txt</code></pre>
+                <p>После этого программа завершится.</p>
+                <hr>
+
+                <h3>6. Добавьте свой popRunToken</h3>
+                <p>Откройте файл:</p>
+                <pre><code>nano token.txt</code></pre>
+                <p>Удалите комментарий и вставьте только свой popRunToken.</p>
+                <p>Пример:</p>
+                <pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+                <p>После вставки сохраните файл:</p>
+                <p><code>CTRL + O</code><br>Нажмите <code>Enter</code></p>
+                <p>Затем выйдите:</p>
+                <p><code>CTRL + X</code></p>
+                <hr>
+
+                <h3>7. Запустите снайпер</h3>
+                <pre><code>python main.py</code></pre>
+                <p>Программа:</p>
+                <ul>
+                    <li>синхронизирует время через NTP;</li>
+                    <li>автоматически определит ближайшую полночь по пекинскому времени (UTC+8);</li>
+                    <li>покажет таймер обратного отсчёта;</li>
+                    <li>дождётся нужного момента;</li>
+                    <li>одновременно отправит запросы с заданными Time Shift;</li>
+                    <li>сохранит журнал работы в файл: <code>unlock_sniper.log</code></li>
+                </ul>
+                <hr>
+
+                <h3>Полезные команды</h3>
+                <p><strong>Запуск программы:</strong><br><code>python main.py</code></p>
+                <p><strong>Просмотр файлов:</strong><br><code>ls</code></p>
+                <p><strong>Открыть token.txt:</strong><br><code>nano token.txt</code></p>
+                <p><strong>Просмотреть лог:</strong><br><code>cat unlock_sniper.log</code></p>
+                <p><strong>Остановить программу:</strong><br><code>Ctrl + C</code></p>
+                <hr>
+
+                <h3>Используемые Time Shift</h3>
+                <p>По умолчанию используются следующие смещения:</p>
+                <ul>
+                    <li>150 мс</li>
+                    <li>250 мс</li>
+                    <li>350 мс</li>
+                    <li>500 мс</li>
+                </ul>
+                <p>Каждое смещение запускается в отдельном потоке и отправляет независимый запрос.</p>
+                <hr>
+
+                <h3>Требования</h3>
+                <ul>
+                    <li>Android с установленным Termux.</li>
+                    <li>Python.</li>
+                    <li>Библиотеки "requests" и "ntplib".</li>
+                    <li>Действительный "popRunToken" в файле "token.txt".</li>
+                    <li>Стабильное интернет-соединение.</li>
+                    <li>Не закрывайте Termux до окончания работы программы.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Script View -->
+        <div id="script-view" class="view-section">
+            <div class="section-header">
+                <h2 class="section-title">Скрипт</h2>
+                <button class="back-btn" onclick="switchView('main-view')">Назад</button>
+            </div>
+            <div class="content-box">
+                <h2>📦 Скачать исходный код</h2>
+                <p>Спасибо за интерес к проекту!</p>
+                <p>Вы можете скачать все файлы проекта двумя способами:</p>
+                <hr>
+                
+                <h3>📂 Вариант 1 — Скачать по отдельности</h3>
+                <p>Если вам нужны только определённые файлы, откройте репозиторий GitHub и скачайте их по одному.</p>
+                <p><strong>GitHub:</strong><br>
+                <a href="https://github.com/Kaguya2021/Kaguya__combain" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: none;">https://github.com/Kaguya2021/Kaguya__combain</a></p>
+                <hr>
+
+                <h3>🚀 Вариант 2 — Скачать весь проект</h3>
+                <p>Нажмите зелёную кнопку «Скачать» ниже, чтобы загрузить весь проект одним архивом.</p>
+                <p>После загрузки распакуйте архив и следуйте инструкции по установке.</p>
+                <br>
+                
+                <a href="bootloader_unlocker.zip" download class="download-all-btn">
+                    📥 Скачать весь проект (ZIP)
+                </a>
+                
+                <br>
+                <p style="text-align: center; color: var(--text-secondary); margin-top: 10px;">💚 Приятного использования!</p>
+            </div>
+        </div>
+
+        <!-- Support View -->
+        <div id="support-view" class="view-section">
+            <div class="section-header">
+                <h2 class="section-title">Тех поддержка</h2>
+                <button class="back-btn" onclick="switchView('main-view')">Назад</button>
+            </div>
+            <div class="cards-grid">
+                <!-- TikTok Card -->
+                <a href="https://tiktok.com/@alkon191" target="_blank" rel="noopener noreferrer" class="support-card">
+                    <div class="card-info">
+                        <h3>TikTok</h3>
+                        <p>@alkon191</p>
+                    </div>
+                    <span class="card-arrow">↗</span>
+                </a>
+
+                <!-- Telegram Profile Card -->
+                <a href="https://t.me/kaguya2_0" target="_blank" rel="noopener noreferrer" class="support-card">
+                    <div class="card-info">
+                        <h3>Telegram</h3>
+                        <p>@kaguya2_0</p>
+                    </div>
+                    <span class="card-arrow">↗</span>
+                </a>
+
+                <!-- Telegram Channel Card -->
+                <a href="https://t.me/kaguya_2_0_bots" target="_blank" rel="noopener noreferrer" class="support-card">
+                    <div class="card-info">
+                        <h3>Telegram Channel</h3>
+                        <p>Канал проекта</p>
+                    </div>
+                    <span class="card-arrow">↗</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchView(viewId) {
+            const views = document.querySe
