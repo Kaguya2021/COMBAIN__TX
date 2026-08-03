@@ -361,7 +361,8 @@
 pip install requests ntplib</code></pre>
                 <hr>
                 <h3>4. Запуск скрипта</h3>
-                <pre><code>cd /sdcard/UnlockSniper
+                <p>Распакуйте архив и перейдите в созданную папку (укажите название вашей папки):</p>
+                <pre><code>cd /storage/emulated/0/имя_вашей_папки
 python main.py</code></pre>
             </div>
         </div>
@@ -426,13 +427,13 @@ python main.py</code></pre>
             
             views.forEach(view => {
                 view.classList.remove('active', 'fade-in');
-                view.style.display = 'none'; // Жестко скрываем неактивные блоки
+                view.style.display = 'none';
             });
 
             const targetView = document.getElementById(viewId);
             if (targetView) {
-                targetView.style.display = 'flex'; // Принудительно показываем нужный блок
-                void targetView.offsetWidth; // Сброс анимации
+                targetView.style.display = 'flex';
+                void targetView.offsetWidth;
                 targetView.classList.add('active', 'fade-in');
             }
         }
